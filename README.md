@@ -11,7 +11,7 @@ PyQt5 app for viewing SMAL meshes
 
 3. Visit the [SMAL](http://smal.is.tue.mpg.de/) website and download the smal_CVPR2017_data.pkl file. Be careful to obtain the correct data file or you'll find the toy reconstructions look strange!
 
-4. Install dependencies, particularly [PyTorch (with cuda support)](https://pytorch.org/), [PyQt5](https://pypi.org/project/PyQt5/) and [PyTorch Port of Neural Mesh Renderer](https://github.com/daniilidis-group/neural_renderer).
+4. Install dependencies, particularly [PyTorch (with cuda support)](https://pytorch.org/), [PyQt5](https://pypi.org/project/PyQt5/), [PyTorch Port of Neural Mesh Renderer](https://github.com/daniilidis-group/neural_renderer) and [nibabel](https://github.com/nipy/nibabel).
 
 5. Test the python3 script
    ```
