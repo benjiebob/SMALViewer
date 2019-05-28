@@ -17,3 +17,23 @@ PyQt5 app for viewing SMAL meshes
    ```
    python smal_viewer.py
    ```
+
+## Acknoledgements
+This work was completed in relation to the following paper:
+
+@inproceedings{biggs2018creatures,
+  title={{C}reatures great and {SMAL}: {R}ecovering the shape and motion of animals from video},
+  author={Biggs, Benjamin and Roddick, Thomas and Fitzgibbon, Andrew and Cipolla, Roberto},
+  booktitle={ACCV},
+  year={2018}
+}
+   
+Please also acknowledge the original authors of the SMAL animal model:
+@inproceedings{Zuffi:CVPR:2017,
+  title = {{3D} Menagerie: Modeling the {3D} Shape and Pose of Animals},
+  author = {Zuffi, Silvia and Kanazawa, Angjoo and Jacobs, David and Black, Michael J.},
+  booktitle = {IEEE Conf. on Computer Vision and Pattern Recognition (CVPR)},
+  month = jul,
+  year = {2017},
+  month_numeric = {7}
+}
