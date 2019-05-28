@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 import neural_renderer as nr
 import torch.nn.functional as F
-from smal.smal_torch_batch import SMALModel
+from SMPL.smal_torch_batch import SMALModel
 from smal.joint_catalog import SMALJointInfo
 
 import pickle as pkl
