@@ -207,7 +207,7 @@ class MainWindow(QMainWindow):
 
         main_layout = QHBoxLayout()
         main_layout.addLayout(ctrl_layout)
-        main_layout.addLayout(view_layout, stretch=1)
+        main_layout.addLayout(view_layout)
 
         main_widget = QWidget()
         main_widget.setLayout(main_layout)
