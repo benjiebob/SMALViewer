@@ -4,9 +4,7 @@ import torch
 
 from PyQt5 import QtGui, QtCore
 from PyQt5.QtWidgets import QMainWindow, QWidget, QFrame, QLabel, QPushButton, QHBoxLayout, QVBoxLayout, QScrollArea, QGridLayout, QCheckBox
-from PyQt5.QtGui import QImage
-
-from pyqt_helpers import image_to_pixmap, createPolyData, image_to_pixmap
+from PyQt5.QtGui import QImage, QPixmap
 
 from controls.shape_slider import ShapeSlider
 from controls.pose_slider import PoseSlider
@@ -27,6 +25,7 @@ import pickle as pkl
 
 NUM_POSE_PARAMS = 32
 NUM_SHAPE_PARAMS = 41
+RENDER_SIZE = 256
 DISPLAY_SIZE = 512
 SMAL_DATA_PATH = 'smal/smal_CVPR2017_data.pkl'
 
@@ -41,7 +40,7 @@ class MainWindow(QMainWindow):
             'trans' : torch.zeros(1, 1, 3).cuda(),
         }
 
-        self.model_renderer = SMAL3DRenderer(DISPLAY_SIZE)
+        self.model_renderer = SMAL3DRenderer(RENDER_SIZE)
         self.faces_np = self.model_renderer.smal_model.faces.cpu().numpy()
 
         with open(SMAL_DATA_PATH, 'rb') as f:
@@ -243,8 +242,8 @@ class MainWindow(QMainWindow):
         with torch.no_grad():
             rendered_images, rendered_silhouettes, rendered_joints, verts, joints_3d = self.model_renderer(self.smal_params)
         
-        image_np = rendered_images[0].permute(1, 2, 0).cpu().numpy()
-        self.render_img_label.setPixmap(image_to_pixmap(image_np, DISPLAY_SIZE))
+        self.image_np = rendered_images[0].permute(1, 2, 0).cpu().numpy()
+        self.render_img_label.setPixmap(self.image_to_pixmap(self.image_np, DISPLAY_SIZE))
         self.render_img_label.update()
 
     def reset_shape(self):
@@ -291,22 +290,16 @@ class MainWindow(QMainWindow):
         self.reset_pose()
         self.reset_trans()
 
-    def export_image(self):
-        pretty_image = self.generate_renderer(silhouette = False)
-        sil_image = self.generate_renderer(silhouette = True)
+    def image_to_pixmap(self, img, img_size):
+        im = np.require(img * 255.0, dtype='uint8')
+        qim = QImage(im.data, im.shape[1], im.shape[0], im.strides[0], QImage.Format_RGB888).copy()
+        pixmap = QPixmap(qim)
+        return pixmap.scaled(img_size, img_size, QtCore.Qt.KeepAspectRatio)
 
-        pretty_small = scipy.misc.imresize(pretty_image, [256, 256])
-        sil_small = scipy.misc.imresize(sil_image, [256, 256], 'nearest')
+    def export_image(self):
+        out_dir = "output"
+        if not os.path.exists(out_dir):
+            os.mkdir(out_dir)
 
         time_str = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-        scipy.misc.imsave(os.path.join("output", "pretty_{0}.png".format(time_str)), pretty_small)
-        scipy.misc.imsave(os.path.join("output", "sil_{0}.png".format(time_str)), sil_small)
-        
-        plt.figure()
-        plt.subplot(121)
-        plt.imshow(pretty_image)
-        plt.subplot(122)
-        plt.imshow(sil_image)
-        plt.show()
-
-
+        scipy.misc.imsave(os.path.join(out_dir, "{0}.png".format(time_str)), self.image_np)
