@@ -1,4 +1,4 @@
-# SMALViewer
+# SMAL Viewer
 PyQt5 app for viewing SMAL meshes
 
 ## Installation
@@ -29,7 +29,7 @@ This work was completed in relation to the following paper:
 }
 ```
    
-Please acknowledge the original authors of the SMAL animal model:
+However, please do acknowledge the original authors of the SMAL animal model:
 ```
 @inproceedings{Zuffi:CVPR:2017,
   title = {{3D} Menagerie: Modeling the {3D} Shape and Pose of Animals},
