@@ -244,9 +244,6 @@ class MainWindow(QMainWindow):
             rendered_images, rendered_silhouettes, rendered_joints, verts, joints_3d = self.model_renderer(self.smal_params)
         
         image_np = rendered_images[0].permute(1, 2, 0).cpu().numpy()
-        verts_np = verts[0].cpu().numpy()
-        
-        poly_data = createPolyData(verts_np, self.faces_np)
         self.render_img_label.setPixmap(image_to_pixmap(image_np, DISPLAY_SIZE))
         self.render_img_label.update()
 

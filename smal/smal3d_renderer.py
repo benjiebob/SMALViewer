@@ -31,7 +31,6 @@ class SMAL3DRenderer(nn.Module):
         with open("smal/dog_texture.pkl", 'rb') as f:
             self.textures = pkl.load(f).cuda()
 
-
     def forward(self, batch_params):
         batch_size = batch_params['betas'].shape[0]
         
@@ -39,8 +38,7 @@ class SMAL3DRenderer(nn.Module):
             batch_params['betas'],
             torch.cat((batch_params['global_rotation'], batch_params['joint_rotations']), dim = 1),
             batch_params['trans'])
-
-        
+   
         faces = self.smal_model.faces.unsqueeze(0).expand(batch_size, -1, -1)
         textures = self.textures.unsqueeze(0).expand(batch_size, -1, -1, -1, -1, -1)
 
