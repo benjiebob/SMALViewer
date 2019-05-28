@@ -21,7 +21,7 @@ PyQt5 app for viewing SMAL meshes
    ```
 
 ## Acknoledgements
-This work was completed in relation to the following paper:
+This work was completed in relation to the paper [Creatures Great and SMAL: Recovering the shape and motion of animals from video](https://arxiv.org/abs/1811.05804):
 ```
 @inproceedings{biggs2018creatures,
   title={{C}reatures great and {SMAL}: {R}ecovering the shape and motion of animals from video},
@@ -31,7 +31,7 @@ This work was completed in relation to the following paper:
 }
 ```
    
-However, please do acknowledge the original authors of the SMAL animal model:
+Please also acknowledge the original authors of the SMAL animal model:
 ```
 @inproceedings{Zuffi:CVPR:2017,
   title = {{3D} Menagerie: Modeling the {3D} Shape and Pose of Animals},
