@@ -1,7 +1,7 @@
 # SMAL Viewer
 PyQt5 app for viewing SMAL meshes
 
-<img src="docs/smal_viewer.gif" width="50%" height="50%">
+<img src="docs/smal_viewer.gif">
 
 ## Installation
 1. Clone the repository with submodules and enter directory
