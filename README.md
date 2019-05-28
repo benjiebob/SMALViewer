@@ -5,7 +5,7 @@ PyQt5 app for viewing SMAL meshes
 1. Clone the repository with submodules and enter directory
    ```
    git clone --recurse-submodules https://github.com/benjiebob/SMALViewer
-   cd CreaturesResult
+   cd SMALViewer
     
 2. Download texture map (from smal/dog_texture.pkl) and a version of SMAL 2017 converted to NumPy (smal_CVPR2017_np.pkl) from [my Google Drive](https://drive.google.com/open?id=1gPwA_tl1qrKiUkveE8PTsEOEMHtTw8br) and place under the smal folder
 
