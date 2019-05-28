@@ -10,8 +10,7 @@ from controls.shape_slider import ShapeSlider
 from controls.pose_slider import PoseSlider
 from controls.trans_slider import TransSlider
 
-import matplotlib.pyplot as plt
-from operator import itemgetter
+from smal.smal3d_renderer import SMAL3DRenderer
 from functools import partial
 
 import os
@@ -20,7 +19,6 @@ import collections
 import scipy.misc
 import datetime
 
-from smal.smal3d_renderer import SMAL3DRenderer
 import pickle as pkl
 
 NUM_POSE_PARAMS = 32
