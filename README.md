@@ -23,16 +23,16 @@ For more information, check out the StackOverflow answer [here](https://stackove
 
 3. Install dependencies, particularly [PyTorch](https://pytorch.org/), [PyQt5](https://pypi.org/project/PyQt5/), [Pyrender](https://github.com/mmatl/pyrender) and [nibabel](https://github.com/nipy/nibabel).
 
-Tips for debugging offscreen render: If you are a Linux user and have trouble with the Pyrender's OffscreenRenderer, I recommend following the steps to install OSMesa [here](https://pyrender.readthedocs.io/en/latest/examples/offscreen.html) including the need to add the following to the top of pyrenderer.py
+⋅⋅⋅Tips for debugging offscreen render: If you are a Linux user and have trouble with the Pyrender's OffscreenRenderer, I recommend following the steps to install OSMesa [here](https://pyrender.readthedocs.io/en/latest/examples/offscreen.html) including the need to add the following to the top of pyrenderer.py
 
 ```
 os.environ['PYOPENGL_PLATFORM'] = 'osmesa'.
 ```
 
-If you are a Windows user and you experience issues here, you can fix by following the advice [here](https://github.com/mmatl/pyrender/issues/117). A simple hack is to:
+⋅⋅⋅If you are a Windows user and you experience issues here, you can fix by following the advice [here](https://github.com/mmatl/pyrender/issues/117). A quick fix is to edit the function "make_current" in pyrender/platforms/pyglet_platform.py, L53 (wherever it's installed for you) to:
   
   ```
-  # Change the function make_uncurrent in pyrender/platforms/pyglet_platform.py, L53 to:
+  # 
 
   def make_uncurrent(self):
       try:
