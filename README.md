@@ -8,15 +8,15 @@ PyQt5 app for viewing SMAL meshes
    ```
    git clone https://github.com/benjiebob/SMALViewer
    cd SMALViewer
+   ```
 
 2. Clone the [SMAL-ST](http://smal.is.tue.mpg.de/) project website, and access the latest version of the SMAL deformable animal model. You should copy all of [these files](https://github.com/silviazuffi/smalst/tree/master/smpl_models) underneath the ./data directory. 
 
    Pro-tip: If you are a Windows user, you can still use these files but you'll need to edit the line endings. Try the following Powershell commands, shown here on one example:
-
-  ```
-  $path="my_smpl_00781_4_all_template_w_tex_uv_001.pkl"
-  (Get-Content $path -Raw).Replace("`r`n","`n") | Set-Content $path -Force
-  ```
+     ```
+     $path="my_smpl_00781_4_all_template_w_tex_uv_001.pkl"
+     (Get-Content $path -Raw).Replace("`r`n","`n") | Set-Content $path -Force
+     ```
 
    For more information, check out the StackOverflow answer [here](https://stackoverflow.com/questions/19127741/replace-crlf-using-powershell)
 
@@ -25,9 +25,9 @@ PyQt5 app for viewing SMAL meshes
 
    Tips for debugging offscreen render: If you are a Linux user and have trouble with the Pyrender's OffscreenRenderer, I recommend following the steps to install OSMesa [here](https://pyrender.readthedocs.io/en/latest/examples/offscreen.html) including the need to add the following to the top of pyrenderer.py
 
-```
-os.environ['PYOPENGL_PLATFORM'] = 'osmesa'.
-```
+   ```
+   os.environ['PYOPENGL_PLATFORM'] = 'osmesa'.
+   ```
 
    If you are a Windows user and you experience issues here, you can fix by following the advice [here](https://github.com/mmatl/pyrender/issues/117). A quick fix is to edit the function "make_current" in pyrender/platforms/pyglet_platform.py, L53 (wherever it's installed for you) to:
   
