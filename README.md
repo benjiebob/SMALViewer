@@ -57,7 +57,7 @@ from pyrenderer import Renderer
 
    For completeness, I've also shown how to apply a texture map to the SMAL mesh with p3d_renderer (again useful for perceptual losses). To do this, you will need to download an example SMAL texture map. Do this by creating an account for the [SMALR page](http://smalr.is.tue.mpg.de/downloads), choose CVPR Downloads and download (for example) the Dog B zip file. Extract this underneath ./data.
 
-## Acknoledgements
+## Acknowledgements
 This work was completed in relation to the paper [Creatures Great and SMAL: Recovering the shape and motion of animals from video](https://arxiv.org/abs/1811.05804):
 ```
 @inproceedings{biggs2018creatures,
