@@ -11,8 +11,8 @@ from controls.pose_slider import PoseSlider
 from controls.trans_slider import TransSlider
 
 from smal_model.smal_torch import SMAL
-# from pyrenderer import Renderer
-from p3d_renderer import Renderer
+from pyrenderer import Renderer
+# from p3d_renderer import Renderer
 from functools import partial
 import time
 
