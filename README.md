@@ -42,21 +42,22 @@ os.environ['PYOPENGL_PLATFORM'] = 'osmesa'.
           pass
   ```
 
-4. For a great many research applications, it is useful to be able to use a differentiably render the SMAL model for e.g. silhouette/texture losses. For this, I have provided a sample script p3d_renderer.py which relies on Facebook's excellent [PyTorch3D](https://github.com/facebookresearch/pytorch3d) library. You can flip between the two rendering methods by selecting between the two imports at the top of pyqt_viewer.py:
+4. Test the python3 script
+   ```
+   python smal_viewer.py
+   ```
+## Differentiable Rendering (Sample)
+
+For many research applications, it is useful to be able to propagate gradients from 2D losses (e.g. silhouette/perceptual) back through the rendering process. For this, one should use a differentiable render such as [PyTorch3D](https://github.com/facebookresearch/pytorch3d) or [Neural Mesh Renderer](https://github.com/daniilidis-group/neural_renderer). Although not usful for this simple demo app, I have included a script p3d_renderer.py which shows how one can achieve differentiable rendering of the SMAL mesh with PyTorch3D. You can flip between the two rendering methods by selecting between the two imports at the top of pyqt_viewer.py:
 
 ```
 from pyrenderer import Renderer
 # from p3d_renderer import Renderer
 ```
 
-   Please note that the speed of PyTorch3D render is significantly slower so you'll probably experience some lag.
+   Please note that the speed of PyTorch3D compared to Pyrender is significantly slower so you'll probably experience some lag with this option.
 
-   For completeness, the p3d_renderer also shows how to apply a texture map to the SMAL mesh. To do this, you will need to download an example SMAL texture map. For this, create an account for the [SMALR page](http://smalr.is.tue.mpg.de/downloads), choose CVPR Downloads and download (for example) the Dog B zip file. Extract this underneath ./data.
-
-5. Test the python3 script
-   ```
-   python smal_viewer.py
-   ```
+   For completeness, I've also shown how to apply a texture map to the SMAL mesh with p3d_renderer (again useful for perceptual losses). To do this, you will need to download an example SMAL texture map. Do this by creating an account for the [SMALR page](http://smalr.is.tue.mpg.de/downloads), choose CVPR Downloads and download (for example) the Dog B zip file. Extract this underneath ./data.
 
 ## Acknoledgements
 This work was completed in relation to the paper [Creatures Great and SMAL: Recovering the shape and motion of animals from video](https://arxiv.org/abs/1811.05804):
