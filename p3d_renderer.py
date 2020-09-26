@@ -11,7 +11,6 @@ from pytorch3d.renderer import (
     PointLights, SoftPhongShader, SoftSilhouetteShader
 )
 from pytorch3d.io import load_objs_as_meshes
-from cameras_real import OpenGLRealPerspectiveCameras
 
 class Renderer(torch.nn.Module):
     def __init__(self, image_size):
