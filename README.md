@@ -11,14 +11,14 @@ PyQt5 app for viewing SMAL meshes
 
 2. Clone the [SMAL-ST](http://smal.is.tue.mpg.de/) project website, and access the latest version of the SMAL deformable animal model. You should copy all of [these files](https://github.com/silviazuffi/smalst/tree/master/smpl_models) underneath the ./data directory. 
 
-Pro-tip: If you are a Windows user, you can still use these files but you'll need to edit the line endings. Try the following Powershell commands, shown here on one example:
+   Pro-tip: If you are a Windows user, you can still use these files but you'll need to edit the line endings. Try the following Powershell commands, shown here on one example:
 
   ```
   $path="my_smpl_00781_4_all_template_w_tex_uv_001.pkl"
   (Get-Content $path -Raw).Replace("`r`n","`n") | Set-Content $path -Force
   ```
 
-For more information, check out the StackOverflow answer [here](https://stackoverflow.com/questions/19127741/replace-crlf-using-powershell)
+   For more information, check out the StackOverflow answer [here](https://stackoverflow.com/questions/19127741/replace-crlf-using-powershell)
 
 
 3. Install dependencies, particularly [PyTorch](https://pytorch.org/), [PyQt5](https://pypi.org/project/PyQt5/), [Pyrender](https://github.com/mmatl/pyrender) and [nibabel](https://github.com/nipy/nibabel).
@@ -29,7 +29,7 @@ For more information, check out the StackOverflow answer [here](https://stackove
 os.environ['PYOPENGL_PLATFORM'] = 'osmesa'.
 ```
 
-⋅⋅⋅If you are a Windows user and you experience issues here, you can fix by following the advice [here](https://github.com/mmatl/pyrender/issues/117). A quick fix is to edit the function "make_current" in pyrender/platforms/pyglet_platform.py, L53 (wherever it's installed for you) to:
+   If you are a Windows user and you experience issues here, you can fix by following the advice [here](https://github.com/mmatl/pyrender/issues/117). A quick fix is to edit the function "make_current" in pyrender/platforms/pyglet_platform.py, L53 (wherever it's installed for you) to:
   
   ```
   # 
@@ -49,9 +49,9 @@ from pyrenderer import Renderer
 # from p3d_renderer import Renderer
 ```
 
-Please note that the speed of PyTorch3D render is significantly slower so you'll probably experience some lag.
+   Please note that the speed of PyTorch3D render is significantly slower so you'll probably experience some lag.
 
-For completeness, the p3d_renderer also shows how to apply a texture map to the SMAL mesh. To do this, you will need to download an example SMAL texture map. For this, create an account for the [SMALR page](http://smalr.is.tue.mpg.de/downloads), choose CVPR Downloads and download (for example) the Dog B zip file. Extract this underneath ./data.
+   For completeness, the p3d_renderer also shows how to apply a texture map to the SMAL mesh. To do this, you will need to download an example SMAL texture map. For this, create an account for the [SMALR page](http://smalr.is.tue.mpg.de/downloads), choose CVPR Downloads and download (for example) the Dog B zip file. Extract this underneath ./data.
 
 5. Test the python3 script
    ```
