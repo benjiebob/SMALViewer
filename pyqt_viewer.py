@@ -10,8 +10,11 @@ from controls.shape_slider import ShapeSlider
 from controls.pose_slider import PoseSlider
 from controls.trans_slider import TransSlider
 
-from smal.smal3d_renderer import SMAL3DRenderer
+from smal_model.smal_torch import SMAL
+# from pyrenderer import Renderer
+from p3d_renderer import Renderer
 from functools import partial
+import time
 
 import os
 import collections
@@ -21,27 +24,26 @@ import datetime
 
 import pickle as pkl
 
-NUM_POSE_PARAMS = 32
+NUM_POSE_PARAMS = 34
 NUM_SHAPE_PARAMS = 41
 RENDER_SIZE = 256
 DISPLAY_SIZE = 512
-SMAL_DATA_PATH = 'smal/smal_CVPR2017_data.pkl'
 
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         QMainWindow.__init__(self, parent)
 
         self.smal_params = {
-            'betas' : torch.zeros(1, NUM_SHAPE_PARAMS).cuda(),
-            'joint_rotations' : torch.zeros(1, NUM_POSE_PARAMS, 3).cuda(),
-            'global_rotation' :  torch.zeros(1, 1, 3).cuda(),
-            'trans' : torch.zeros(1, 1, 3).cuda(),
+            'betas' : torch.zeros(1, NUM_SHAPE_PARAMS),
+            'joint_rotations' : torch.zeros(1, NUM_POSE_PARAMS, 3),
+            'global_rotation' :  torch.zeros(1, 1, 3),
+            'trans' : torch.zeros(1, 1, 3),
         }
 
-        self.model_renderer = SMAL3DRenderer(RENDER_SIZE)
-        self.faces_np = self.model_renderer.smal_model.faces.cpu().numpy()
+        self.model_renderer = Renderer(RENDER_SIZE)
+        self.smal_model = SMAL('data/my_smpl_00781_4_all.pkl')
 
-        with open(SMAL_DATA_PATH, 'rb') as f:
+        with open('data/my_smpl_data_00781_4_all.pkl', 'rb') as f:
             u = pkl._Unpickler(f)
             u.encoding = 'latin1'
             smal_data = u.load()
@@ -133,13 +135,22 @@ class MainWindow(QMainWindow):
         reset_pose_pb.clicked.connect(self.reset_pose)
 
         root_pose_dict = collections.OrderedDict()
-        root_pose_dict[ "Face Left" ] = np.array([0, 0, np.pi])
-        root_pose_dict[ "Diag Left" ] = np.array([0, 0, 3 * np.pi / 2])
-        root_pose_dict[ "Head On" ] = np.array([0, 0, np.pi / 2])
-        root_pose_dict[ "Diag Right" ] = np.array([0, 0, np.pi / 4])
-        root_pose_dict[ "Face Right" ] = np.array([0, 0, 0])
-        root_pose_dict[ "Straight Up" ] = np.array([np.pi / 2, 0, np.pi / 2])
-        root_pose_dict[ "Straight Down" ] = np.array([-np.pi / 2, 0, np.pi / 2])
+        # root_pose_dict[ "Face Left" ] = np.array([0, 0, np.pi])
+        # root_pose_dict[ "Diag Left" ] = np.array([0, 0, 3 * np.pi / 2])
+        # root_pose_dict[ "Head On" ] = np.array([0, 0, np.pi / 2])
+        # root_pose_dict[ "Diag Right" ] = np.array([0, 0, np.pi / 4])
+        # root_pose_dict[ "Face Right" ] = np.array([0, 0, 0])
+        # root_pose_dict[ "Straight Up" ] = np.array([np.pi / 2, 0, np.pi / 2])
+        # root_pose_dict[ "Straight Down" ] = np.array([-np.pi / 2, 0, np.pi / 2])
+
+        root_pose_dict[ "Face Left" ] = np.array([-np.pi / 2, 0, -np.pi])
+        root_pose_dict[ "Diag Left" ] = np.array([-np.pi / 2, 0, -3 * np.pi / 4])
+        root_pose_dict[ "Head On" ] = np.array([-np.pi / 2, 0, -np.pi / 2])
+        root_pose_dict[ "Diag Right" ] = np.array([-np.pi / 2, 0, -np.pi / 4])
+        root_pose_dict[ "Face Right" ] = np.array([-np.pi / 2, 0, 0])
+
+        root_pose_dict[ "Straight Up" ] = np.array([np.pi, np.pi, -np.pi / 2])
+        root_pose_dict[ "Straight Down" ] = np.array([np.pi, np.pi, np.pi / 2])
 
         root_pose_layout = QGridLayout()
         idx = 0
@@ -227,20 +238,39 @@ class MainWindow(QMainWindow):
             self.smal_params['betas'][0, sender.idx] = value
         elif type(sender) is PoseSlider:
             if sender.idx == 0:
-                self.smal_params['global_rotation'][0, sender.idx] = torch.FloatTensor(value).cuda()
+                self.smal_params['global_rotation'][0, sender.idx] = torch.FloatTensor(value)
             else:
-                self.smal_params['joint_rotations'][0, sender.idx - 1] = torch.FloatTensor(value).cuda()
+                self.smal_params['joint_rotations'][0, sender.idx - 1] = torch.FloatTensor(value)
         elif type(sender) is TransSlider:
-            self.smal_params['trans'][0] = torch.FloatTensor(value).cuda()
+            self.smal_params['trans'][0] = torch.FloatTensor(value)
 
         if self.update_poly:
             self.update_render()
 
     def update_render(self):
         with torch.no_grad():
-            rendered_images, rendered_silhouettes, rendered_joints, verts, joints_3d = self.model_renderer(self.smal_params)
+            start = time.time()
+            verts, joints, Rs, v_shaped = self.smal_model(
+                self.smal_params['betas'], 
+                torch.cat([self.smal_params['global_rotation'], self.smal_params['joint_rotations']], dim = 1))
+
+            # normalize by center of mass
+            verts = verts - torch.mean(verts, dim = 1, keepdim=True)
+
+            # add on the translation
+            verts = verts + self.smal_params['trans']
+
+            end = time.time()
+            ellapsed  = end - start
+            print (f"SMAL Time: {ellapsed }")
+
+            start = time.time()
+            rendered_images = self.model_renderer(verts, self.smal_model.faces.unsqueeze(0))
+            end = time.time()
+            ellapsed = end - start
+            print (f"Renderer Time: {ellapsed }")
         
-        self.image_np = rendered_images[0].permute(1, 2, 0).cpu().numpy()
+        self.image_np = rendered_images[0, :, :, :3]
         self.render_img_label.setPixmap(self.image_to_pixmap(self.image_np, DISPLAY_SIZE))
         self.render_img_label.update()
 
@@ -268,7 +298,7 @@ class MainWindow(QMainWindow):
 
         self.update_poly = True
         self.statusBar().showMessage(str(toy_betas))
-        self.smal_params['betas'][0] = torch.from_numpy(toy_betas).cuda()
+        self.smal_params['betas'][0] = torch.from_numpy(toy_betas)
         self.update_render()
 
     def toggle_control(self, layout):

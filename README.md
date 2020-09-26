@@ -6,14 +6,52 @@ PyQt5 app for viewing SMAL meshes
 ## Installation
 1. Clone the repository with submodules and enter directory
    ```
-   git clone --recurse-submodules https://github.com/benjiebob/SMALViewer
+   git clone https://github.com/benjiebob/SMALViewer
    cd SMALViewer
-    
-2. Download texture map (from smal/dog_texture.pkl) and a version of SMAL 2017 converted to NumPy (smal_CVPR2017_np.pkl) from [my Google Drive](https://drive.google.com/open?id=1gPwA_tl1qrKiUkveE8PTsEOEMHtTw8br) and place under the smal folder
 
-3. Visit the [SMAL](http://smal.is.tue.mpg.de/) website and download the smal_CVPR2017_data.pkl file. Be careful to obtain the correct data file or you'll find the toy reconstructions look strange!
+2. Clone the [SMAL-ST](http://smal.is.tue.mpg.de/) project website, and access the latest version of the SMAL deformable animal model. You should copy all of [these files](https://github.com/silviazuffi/smalst/tree/master/smpl_models) underneath the ./data directory. 
 
-4. Install dependencies, particularly [PyTorch (with cuda support)](https://pytorch.org/), [PyQt5](https://pypi.org/project/PyQt5/), [PyTorch Port of Neural Mesh Renderer](https://github.com/daniilidis-group/neural_renderer) and [nibabel](https://github.com/nipy/nibabel).
+Pro-tip: If you are a Windows user, you can still use these files but you'll need to edit the line endings. Try the following Powershell commands, shown here on one example:
+
+  ```
+  $path="my_smpl_00781_4_all_template_w_tex_uv_001.pkl"
+  (Get-Content $path -Raw).Replace("`r`n","`n") | Set-Content $path -Force
+  ```
+
+For more information, check out the StackOverflow answer [here](https://stackoverflow.com/questions/19127741/replace-crlf-using-powershell)
+
+
+3. Install dependencies, particularly [PyTorch](https://pytorch.org/), [PyQt5](https://pypi.org/project/PyQt5/), [Pyrender](https://github.com/mmatl/pyrender) and [nibabel](https://github.com/nipy/nibabel).
+
+Tips for debugging offscreen render: If you are a Linux user and have trouble with the Pyrender's OffscreenRenderer, I recommend following the steps to install OSMesa [here](https://pyrender.readthedocs.io/en/latest/examples/offscreen.html) including the need to add the following to the top of pyrenderer.py
+
+```
+os.environ['PYOPENGL_PLATFORM'] = 'osmesa'.
+```
+
+If you are a Windows user and you experience issues here, you can fix by following the advice [here](https://github.com/mmatl/pyrender/issues/117). A simple hack is to:
+  
+  ```
+  # Change the function make_uncurrent in pyrender/platforms/pyglet_platform.py, L53 to:
+
+  def make_uncurrent(self):
+      try:
+          import pyglet.gl.xlib
+          pyglet.gl.xlib.glx.glXMakeContextCurrent(self._window.context.x_display, 0, 0, None)
+      except:
+          pass
+  ```
+
+4. For a great many research applications, it is useful to be able to use a differentiably render the SMAL model for e.g. silhouette/texture losses. For this, I have provided a sample script p3d_renderer.py which relies on Facebook's excellent [PyTorch3D](https://github.com/facebookresearch/pytorch3d) library. You can flip between the two rendering methods by selecting between the two imports at the top of pyqt_viewer.py:
+
+```
+from pyrenderer import Renderer
+# from p3d_renderer import Renderer
+```
+
+Please note that the speed of PyTorch3D render is significantly slower so you'll probably experience some lag.
+
+For completeness, the p3d_renderer also shows how to apply a texture map to the SMAL mesh. To do this, you will need to download an example SMAL texture map. For this, create an account for the [SMALR page](http://smalr.is.tue.mpg.de/downloads), choose CVPR Downloads and download (for example) the Dog B zip file. Extract this underneath ./data.
 
 5. Test the python3 script
    ```
@@ -30,7 +68,17 @@ This work was completed in relation to the paper [Creatures Great and SMAL: Reco
   year={2018}
 }
 ```
-   
+
+and more recently [Who Left the Dogs Out? 3D Animal Reconstruction with Expectation Maximization in the Loop](https://arxiv.org/abs/2007.11110):
+```
+@inproceedings{biggs2020wldo,
+  title={{W}ho left the dogs out?: {3D} animal reconstruction with expectation maximization in the loop},
+  author={Biggs, Benjamin and Boyne, Oliver and Charles, James and Fitzgibbon, Andrew and Cipolla, Roberto},
+  booktitle={ECCV},
+  year={2020}
+}
+```
+
 Please also acknowledge the original authors of the SMAL animal model:
 ```
 @inproceedings{Zuffi:CVPR:2017,
