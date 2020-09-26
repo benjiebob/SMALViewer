@@ -31,14 +31,14 @@ PyQt5 app for viewing SMAL meshes
 
    If you are a Windows user and you experience issues here, you can fix by following the advice [here](https://github.com/mmatl/pyrender/issues/117). A quick fix is to edit the function "make_current" in pyrender/platforms/pyglet_platform.py, L53 (wherever it's installed for you) to:
   
-  ```
-  def make_uncurrent(self):
-      try:
-          import pyglet.gl.xlib
-          pyglet.gl.xlib.glx.glXMakeContextCurrent(self._window.context.x_display, 0, 0, None)
-      except:
-          pass
-  ```
+     ```
+     def make_uncurrent(self):
+         try:
+             import pyglet.gl.xlib
+             pyglet.gl.xlib.glx.glXMakeContextCurrent(self._window.context.x_display, 0, 0, None)
+         except:
+             pass
+     ```
 
 4. Test the python3 script
    ```
