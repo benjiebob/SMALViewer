@@ -40,7 +40,9 @@ PyQt5 app for viewing SMAL meshes
              pass
      ```
 
-4. Test the python3 script
+4. Download [SMPL](https://smpl.is.tue.mpg.de/) and create a smpl_webuser directory underneath SMALViewer/smal_model
+
+5. Test the python3 script
    ```
    python smal_viewer.py
    ```
