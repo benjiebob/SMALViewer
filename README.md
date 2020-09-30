@@ -10,7 +10,7 @@ PyQt5 app for viewing SMAL meshes
    cd SMALViewer
    ```
 
-2. Clone the [SMAL-ST](http://smal.is.tue.mpg.de/) project website in order to access the latest version of the SMAL deformable animal model. You should copy all of [these files](https://github.com/silviazuffi/smalst/tree/master/smpl_models) underneath a SMALViewer/data directory. 
+2. Clone the [SMALST](https://github.com/silviazuffi/smalst) project website in order to access the latest version of the SMAL deformable animal model. You should copy all of [these files](https://github.com/silviazuffi/smalst/tree/master/smpl_models) underneath a SMALViewer/data directory. 
 
    Windows tip: If you are a Windows user, you can use these files but you'll need to edit the line endings. Try the following Powershell commands, shown here on one example:
      ```
